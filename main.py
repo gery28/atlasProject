@@ -1,6 +1,6 @@
 from ipyleaflet import Map, Marker
 from ipywidgets.embed import embed_minimal_html
-from flask import Flask, render_template
+from flask import Flask, render_template, render_template_string
 import folium
 from folium.plugins import FeatureGroupSubGroup
 import requests
@@ -181,9 +181,13 @@ Not all those who wander are lost
     m.save("templates/map.html")
     m.save("map.html")
 
+    # @app.route("/")
+    # def home():
+    #     return render_template("map.html")
+
     @app.route("/")
-    def home():
-        return render_template("map.html")
+    def fullscreen():
+        return m.get_root().render()
 
     app.run()
 
