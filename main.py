@@ -164,11 +164,21 @@ Not all those who wander are lost
     ).add_to(m)
 
     folium.TileLayer(
+        tiles='https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png',
+        attr='toner-light',
+        name='Toner-Light',
+        min_zoom=MIN_ZOOM,
+    ).add_to(m)
+
+    folium.TileLayer(
         tiles='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         attr='OpenTopoMap',
         name='Topo Map',
         min_zoom=MIN_ZOOM
     ).add_to(m)
+
+
+
 
     geojson_data = requests.get(
         "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/world_countries.json"
