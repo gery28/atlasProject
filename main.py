@@ -14,11 +14,14 @@ from build import titles, markers
 app = Flask(__name__)
 
 logging.basicConfig(
-    level=logging.INFO,  # INFO level logs and above
+    level=logging.DEBUG,
     format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
 )
 logger = logging.getLogger(__name__)
+app.logger.setLevel(logging.DEBUG)
 
+werkzeug_logger = logging.getLogger('werkzeug')
+werkzeug_logger.setLevel(logging.DEBUG)
 
 START_ZOOM = 4
 MIN_ZOOM = 2
@@ -67,7 +70,7 @@ def main():
 
     for i in landmarks:
         landmark_name_touple = list(i[0][1].items())[0]
-        logger.info(i)
+        app.logger.info(i)
         folium.Marker(
             location=[float(i[1][0]), float(i[1][1])],
             tooltip=str(landmark_name_touple[0]),
@@ -168,4 +171,5 @@ Not all those who wander are lost
 
 if __name__ == "__main__":
     main()
-    app.run(port=5000)
+    #app.run(port=5000)
+    serve(app, host="0.0.0.0", port=5000)
