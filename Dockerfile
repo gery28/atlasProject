@@ -11,4 +11,4 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
 EXPOSE 5000
-CMD ["gunicorn", "-w 4", "-b 0.0.0.0:8000", "app:main"]
+CMD ["waitress-serve", "--threads=8", "--host=0.0.0.0", "--port=8080", "main:app"]
