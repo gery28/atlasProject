@@ -12,4 +12,4 @@ RUN pip install --upgrade pip \
 
 EXPOSE 5000
 # CMD ["waitress-serve", "--threads=8", "--host=127.0.0.1", "--port=8000", "main:app"]
-CMD ["python","main"]
+CMD ["python","main.py"]
