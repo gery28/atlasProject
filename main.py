@@ -1,15 +1,24 @@
 from ipyleaflet import Map, Marker
 from ipywidgets.embed import embed_minimal_html
 from flask import Flask, render_template, render_template_string
+from waitress import serve
 import folium
 from folium.plugins import FeatureGroupSubGroup, Search, MarkerCluster
 import requests
 from tqdm import tqdm
+import logging
 
 from api import landmark_to_coords
 from build import titles, markers
 
 app = Flask(__name__)
+
+logging.basicConfig(
+    level=logging.INFO,  # INFO level logs and above
+    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 
 START_ZOOM = 4
 MIN_ZOOM = 2
@@ -58,7 +67,7 @@ def main():
 
     for i in landmarks:
         landmark_name_touple = list(i[0][1].items())[0]
-        print(i)
+        logger.info(i)
         folium.Marker(
             location=[float(i[1][0]), float(i[1][1])],
             tooltip=str(landmark_name_touple[0]),
