@@ -19,7 +19,6 @@ MAX_LON = 360
 MIN_LAT = -180
 MAX_LAT = 1800
 
-
 try:
     with open("asia-save.txt", "r", encoding="utf-8") as file:
         landmarks = eval(file.read())
@@ -146,8 +145,8 @@ Not all those who wander are lost
         collapsed=False
     ).add_to(m)
 
-    m.save("templates/map.html")
-    m.save("map.html")
+    # m.save("templates/map.html")
+    # m.save("map.html")
 
     # @app.route("/")
     # def home():
