@@ -2,7 +2,7 @@ from ipyleaflet import Map, Marker
 from ipywidgets.embed import embed_minimal_html
 from flask import Flask, render_template, render_template_string
 import folium
-from folium.plugins import FeatureGroupSubGroup
+from folium.plugins import FeatureGroupSubGroup, Search, MarkerCluster
 import requests
 from tqdm import tqdm
 
@@ -66,12 +66,12 @@ for i in range(len(asia)):
 print(*asia_dict, sep="\n")
 print(list(asia_dict[0][1].items())[0])
 
-#for i in tqdm(asia_dict):
-    #print(list(i[1].items())[0])
-    #landmarks.append([i, landmark_to_coords(list(i[1].items())[0][0], list(i[1].items())[0][1])])
+# for i in tqdm(asia_dict):
+# print(list(i[1].items())[0])
+# landmarks.append([i, landmark_to_coords(list(i[1].items())[0][0], list(i[1].items())[0][1])])
 
-#with open("asia-save.txt", "w", encoding="utf-8") as file:
-    #file.write(str(landmarks))
+# with open("asia-save.txt", "w", encoding="utf-8") as file:
+# file.write(str(landmarks))
 
 with open("asia-save.txt", "r", encoding="utf-8") as file:
     landmarks = eval(file.read())
@@ -105,6 +105,7 @@ def main():
     learning_group = folium.FeatureGroup(name='learning')
     text_group = folium.FeatureGroup(name='text', show=False)
     test_group = folium.FeatureGroup(name='test', show=False)
+
     for i in landmarks:
         landmark_name_touple = list(i[0][1].items())[0]
         print(i)
@@ -112,6 +113,7 @@ def main():
             location=[float(i[1][0]), float(i[1][1])],
             tooltip=str(landmark_name_touple[0]),
             popup=str(landmark_name_touple[0]),
+            title=str(landmark_name_touple[0]),
             icon=folium.Icon(icon=markers[i[0][0]][1], color=markers[i[0][0]][0]),
 
         ).add_to(learning_group)
@@ -177,9 +179,6 @@ Not all those who wander are lost
         min_zoom=MIN_ZOOM
     ).add_to(m)
 
-
-
-
     geojson_data = requests.get(
         "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/world_countries.json"
     ).json()
@@ -187,6 +186,14 @@ Not all those who wander are lost
     folium.GeoJson(geojson_data, name="country outlines").add_to(m)
 
     folium.LayerControl().add_to(m)
+
+    search = Search(
+        layer=learning_group,
+        geom_type='Point',
+        search_label="title",  # or "popup"
+        placeholder="Search city",
+        collapsed=False
+    ).add_to(m)
 
     m.save("templates/map.html")
     m.save("map.html")
