@@ -11,4 +11,4 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
 EXPOSE 5000
-RUN python main.py
+CMD ["python", "main.py"]
