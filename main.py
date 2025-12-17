@@ -39,7 +39,6 @@ except:
     with open("app/asia-save.txt", "r", encoding="utf-8") as file:
         landmarks = eval(file.read())
 
-
 # country_code,latitude,longitude,country,usa_state_code,usa_state_latitude,usa_state_longitude,usa_state
 # test_coords_file = []
 # with open("world_country_and_usa_states_latitude_and_longitude_values.csv", "r") as file:
@@ -47,16 +46,17 @@ except:
 #        test_coords_file.append(i.split(","))
 
 m = folium.Map(location=[0, 0],
-                   zoom_start=START_ZOOM,
-                   min_zoom=MIN_ZOOM,
-                   max_zoom=MAX_ZOOM,
-                   min_lat=MIN_LAT,
-                   max_lat=MAX_LAT,
-                   min_lon=MIN_LON,
-                   max_lon=MAX_LON,
-                   zoom_control=True,
-                   max_bounds=True
-                   )
+               zoom_start=START_ZOOM,
+               min_zoom=MIN_ZOOM,
+               max_zoom=MAX_ZOOM,
+               min_lat=MIN_LAT,
+               max_lat=MAX_LAT,
+               min_lon=MIN_LON,
+               max_lon=MAX_LON,
+               zoom_control=True,
+               max_bounds=True
+               )
+
 
 def main():
     # m = Map(center=(52.2, 0.1), zoom=10)
@@ -165,16 +165,19 @@ Not all those who wander are lost
     # def home():
     #     return render_template("map.html")
 
+
 main()
+
 
 @app.route("/")
 def fullscreen():
     # return m.get_root().render()
     return Response(m.get_root().render(), mimetype="text/html")
-    #return "asd"
+    # return "asd"
+
 
 asgi_app = WsgiToAsgi(app)
 
 if __name__ == "__main__":
     # app.run(port=5000)
-    serve(app, host="0.0.0.0", port=5000)
+    serve(app, host="0.0.0.0", port=8080)

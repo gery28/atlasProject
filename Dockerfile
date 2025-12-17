@@ -18,7 +18,7 @@ RUN pip install uvicorn
 RUN pip install gunicorn
 
 
-EXPOSE 5000
+EXPOSE 8080
 # CMD ["waitress-serve", "--threads=8", "--host=0.0.0.0", "--port=5000", "main:app"]
 # CMD ["ls"]
 # CMD ["uvicorn", "atlas:asgi_app", "--host", "0.0.0.0", "--port", "5000"]
