@@ -22,4 +22,5 @@ EXPOSE 5000
 # CMD ["waitress-serve", "--threads=8", "--host=0.0.0.0", "--port=5000", "main:app"]
 # CMD ["ls"]
 # CMD ["uvicorn", "atlas:asgi_app", "--host", "0.0.0.0", "--port", "5000"]
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "main:app"]
+# CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "main:app"]
+CMD ["python","main.py"]
