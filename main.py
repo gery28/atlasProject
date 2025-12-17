@@ -1,12 +1,13 @@
 from ipyleaflet import Map, Marker
 from ipywidgets.embed import embed_minimal_html
-from flask import Flask, render_template, render_template_string
+from flask import Flask, render_template, render_template_string, Response
 from waitress import serve
 import folium
 from folium.plugins import FeatureGroupSubGroup, Search, MarkerCluster
 import requests
 from tqdm import tqdm
 import logging
+from asgiref.wsgi import WsgiToAsgi
 
 from api import landmark_to_coords
 from build import titles, markers
@@ -45,14 +46,7 @@ except:
 #    for i in file.readlines():
 #        test_coords_file.append(i.split(","))
 
-
-def main():
-    # m = Map(center=(52.2, 0.1), zoom=10)
-    # m.add(Marker(location=(52.2, 0.1)))
-    #
-    # embed_minimal_html("templates/map.html", views=[m], title="Leaflet map")
-
-    m = folium.Map(location=[0, 0],
+m = folium.Map(location=[0, 0],
                    zoom_start=START_ZOOM,
                    min_zoom=MIN_ZOOM,
                    max_zoom=MAX_ZOOM,
@@ -63,6 +57,13 @@ def main():
                    zoom_control=True,
                    max_bounds=True
                    )
+
+def main():
+    # m = Map(center=(52.2, 0.1), zoom=10)
+    # m.add(Marker(location=(52.2, 0.1)))
+    #
+    # embed_minimal_html("templates/map.html", views=[m], title="Leaflet map")
+
     # main_group = folium.FeatureGroup(name='All Markers').add_to(m)
     learning_group = folium.FeatureGroup(name='learning')
     text_group = folium.FeatureGroup(name='text', show=False)
@@ -164,12 +165,16 @@ Not all those who wander are lost
     # def home():
     #     return render_template("map.html")
 
-    @app.route("/")
-    def fullscreen():
-        return m.get_root().render()
 
+@app.route("/")
+def fullscreen():
+    # return m.get_root().render()
+    return Response(m.get_root().render(), mimetype="text/html")
+
+
+asgi_app = WsgiToAsgi(app)
+main()
 
 if __name__ == "__main__":
-    main()
-    #app.run(port=5000)
+    # app.run(port=5000)
     serve(app, host="0.0.0.0", port=5000)
