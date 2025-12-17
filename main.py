@@ -1,10 +1,11 @@
 from ipyleaflet import Map, Marker
 from ipywidgets.embed import embed_minimal_html
-from flask import Flask, render_template, render_template_string, Response
+from flask import Flask, render_template, render_template_string, Response, send_from_directory, url_for
 from waitress import serve
 import folium
 from folium.plugins import FeatureGroupSubGroup, Search, MarkerCluster
 import requests
+import os
 from tqdm import tqdm
 import logging
 from asgiref.wsgi import WsgiToAsgi
@@ -23,6 +24,7 @@ app.logger.setLevel(logging.DEBUG)
 
 werkzeug_logger = logging.getLogger('werkzeug')
 werkzeug_logger.setLevel(logging.DEBUG)
+
 
 START_ZOOM = 4
 MIN_ZOOM = 2
@@ -155,7 +157,7 @@ Not all those who wander are lost
         geom_type='Point',
         search_label="title",  # or "popup"
         placeholder="Search city",
-        collapsed=False
+        collapsed=True
     ).add_to(m)
 
     # m.save("templates/map.html")
@@ -175,6 +177,10 @@ def fullscreen():
     return Response(m.get_root().render(), mimetype="text/html")
     # return "asd"
 
+# @app.route('/favicon.ico')
+# def favicon():
+#     return send_from_directory(os.path.join(app.root_path, 'static'),
+#                                'static/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 asgi_app = WsgiToAsgi(app)
 
