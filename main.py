@@ -165,12 +165,13 @@ Not all those who wander are lost
     # def home():
     #     return render_template("map.html")
 
+main()
 
 @app.route("/")
 def fullscreen():
     # return m.get_root().render()
-    #return Response(m.get_root().render(), mimetype="text/html")
-    return "asd"
+    return Response(m.get_root().render(), mimetype="text/html")
+    #return "asd"
 
 asgi_app = WsgiToAsgi(app)
 
