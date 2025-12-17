@@ -169,12 +169,10 @@ Not all those who wander are lost
 @app.route("/")
 def fullscreen():
     # return m.get_root().render()
-    return Response(m.get_root().render(), mimetype="text/html")
-
+    #return Response(m.get_root().render(), mimetype="text/html")
+    return "asd"
 
 asgi_app = WsgiToAsgi(app)
-main()
-
 
 if __name__ == "__main__":
     # app.run(port=5000)
