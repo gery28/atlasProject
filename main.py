@@ -10,8 +10,7 @@ from tqdm import tqdm
 import logging
 from asgiref.wsgi import WsgiToAsgi
 
-from api import landmark_to_coords
-from build import titles, markers
+from build import titles_asia, markers_asia, titles_hun, markers_hun
 
 app = Flask(__name__)
 
@@ -36,10 +35,16 @@ MAX_LAT = 1800
 
 try:
     with open("asia-save.txt", "r", encoding="utf-8") as file:
-        landmarks = eval(file.read())
+        landmarks_asia = eval(file.read())
 except:
     with open("app/asia-save.txt", "r", encoding="utf-8") as file:
-        landmarks = eval(file.read())
+        landmarks_asia = eval(file.read())
+try:
+    with open("hun-save.txt", "r", encoding="utf-8") as file:
+        landmarks_hun = eval(file.read())
+except:
+    with open("app/hun-save.txt", "r", encoding="utf-8") as file:
+        landmarks_hun = eval(file.read())
 
 # country_code,latitude,longitude,country,usa_state_code,usa_state_latitude,usa_state_longitude,usa_state
 # test_coords_file = []
@@ -71,7 +76,7 @@ def main():
     text_group = folium.FeatureGroup(name='text', show=False)
     test_group = folium.FeatureGroup(name='test', show=False)
 
-    for i in landmarks:
+    for i in landmarks_asia:
         landmark_name_touple = list(i[0][1].items())[0]
         app.logger.info(i)
         folium.Marker(
@@ -79,7 +84,49 @@ def main():
             tooltip=str(landmark_name_touple[0]),
             popup=str(landmark_name_touple[0]),
             title=str(landmark_name_touple[0]),
-            icon=folium.Icon(icon=markers[i[0][0]][1], color=markers[i[0][0]][0]),
+            icon=folium.Icon(icon=markers_asia[i[0][0]][1], color=markers_asia[i[0][0]][0]),
+
+        ).add_to(learning_group)
+        folium.Marker(
+            location=[float(i[1][0]), float(i[1][1])],
+            tooltip=str(landmark_name_touple[0]),
+            popup=str(landmark_name_touple[0]),
+            icon=folium.DivIcon(html=f"""
+                                     <div style="
+                                         position: relative;
+                                         top: -50px;
+                                         left: -10px;
+                                         color: black;
+                                         font-size: 12px;
+                                         font-weight: bold;
+                                         background: rgba(255,255,255,0);
+                                         padding: 2px 4px;
+                                         border-radius: 3px;
+                                         min-width:200px
+                                     ">
+                                         {landmark_name_touple[0]}
+                                     </div>
+                                     """
+                                ),
+
+        ).add_to(text_group)
+        folium.Marker(
+            location=[float(i[1][0]), float(i[1][1])],
+            tooltip="Reveal!",
+            popup=str(landmark_name_touple[0]),
+            icon=folium.Icon(icon="cloud", color="red"),
+        ).add_to(test_group)
+
+
+    for i in landmarks_hun:
+        landmark_name_touple = list(i[0][1].items())[0]
+        app.logger.info(i)
+        folium.Marker(
+            location=[float(i[1][0]), float(i[1][1])],
+            tooltip=str(landmark_name_touple[0]),
+            popup=str(landmark_name_touple[0]),
+            title=str(landmark_name_touple[0]),
+            icon=folium.Icon(icon=markers_hun[i[0][0]][1], color=markers_hun[i[0][0]][0]),
 
         ).add_to(learning_group)
         folium.Marker(
